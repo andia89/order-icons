@@ -11,13 +11,9 @@ const home_dir = GLib.get_home_dir();
 const orderfile_path = ["/usr/share/indicators/application/", home_dir + "/.local/share/indicators/application/"];
 const orderfile_fn = "ordering-override.keyfile";
 
-/**
- * The method, which is invoked, when the extension has been enabled.
- */
-
 
 function enable() {
-    Panel.Panel.prototype._redrawIndicator = _redrawIndicator;
+    Panel.Panel.prototype._redrawIndicators = _redrawIndicators;
     Panel.Panel.prototype._addToPanelBox = _addToPanelBox;
 }
 
@@ -25,14 +21,11 @@ function enable() {
 function disable() {
 }
 
-function _redrawIndicator (pos_arr){
-
-        let prev = pos_arr.length;
+function _redrawIndicators (pos_arr){
         for (let i = 0; i < pos_arr.length; i++){
             let role = pos_arr[i].role;
             let indicator = pos_arr[i].indicator;
-            let position = prev;
-            
+            let position = i;
             
             let box = this.statusArea[role].get_parent().get_parent()
             
@@ -53,7 +46,6 @@ function _redrawIndicator (pos_arr){
             indicator.connect('menu-set', this._onMenuSet.bind(this));
             this._onMenuSet(indicator);
             }
-            prev--;
       }
 
 
@@ -109,7 +101,7 @@ function  _addToPanelBox(role, indicator, position, box) {
                 }
             })
         if (order_file){
-            this._redrawIndicator(pos_arr);
+            this._redrawIndicators(pos_arr);
         }
     }
 
@@ -148,6 +140,5 @@ function getFilePosition(name, arr) {
     return null;
     }
     
-
 
 
