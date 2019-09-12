@@ -11,16 +11,15 @@ const home_dir = GLib.get_home_dir();
 const orderfile_path = ["/usr/share/indicators/application/", home_dir + "/.local/share/indicators/application/"];
 const orderfile_fn = "ordering-override.keyfile";
 
-var _origRedrawIndicator = Panel.Panel.prototype._redrawIndicator;
 var _origAddToPanelBox = Panel.Panel.prototype._addToPanelBox;
 
 enabled() {
-    Panel.Panel.prototype._redrawIndicator = _redrawIndicator;
+    Panel.Panel.prototype._redrawIndicators = _redrawIndicators;
     Panel.Panel.prototype._addToPanelBox = _addToPanelBox;
 }
 
 disable() {
-    Panel.Panel.prototype._redrawIndicator = _origRedrawIndicator;
+    Panel.Panel.prototype._redrawIndicators = undefined;
     Panel.Panel.prototype._addToPanelBox = _origAddToPanelBox;
 }
 
