@@ -13,12 +13,12 @@ const orderfile_fn = "ordering-override.keyfile";
 
 var _origAddToPanelBox = Panel.Panel.prototype._addToPanelBox;
 
-enabled() {
+function enable() {
     Panel.Panel.prototype._redrawIndicators = _redrawIndicators;
     Panel.Panel.prototype._addToPanelBox = _addToPanelBox;
 }
 
-disable() {
+function disable() {
     Panel.Panel.prototype._redrawIndicators = undefined;
     Panel.Panel.prototype._addToPanelBox = _origAddToPanelBox;
 }
@@ -28,9 +28,9 @@ function _redrawIndicators (pos_arr){
             let role = pos_arr[i].role;
             let indicator = pos_arr[i].indicator;
             let position = i;
-            
             let box = this.statusArea[role].get_parent().get_parent()
-            
+            log(role);
+            log(position);
             let container = indicator.container;
             container.show();
             let parent = container.get_parent();
@@ -52,31 +52,36 @@ function _redrawIndicators (pos_arr){
 
 
 function  _addToPanelBox(role, indicator, position, box) {
-        let orderfile = null;
         let order_file = false;
-        
-        let order_arr = (readFile(orderfile_path[0]+orderfile_fn));
-        if (order_arr == null)
-            order_arr = (readFile(orderfile_path[1]+orderfile_fn));
-        if (order_arr !== null){
+        let order_arr = null;
+
+        let order_arr_sys = (readFile(orderfile_path[0]+orderfile_fn));
+        let order_arr_user = (readFile(orderfile_path[1]+orderfile_fn));
+
+        if (order_arr_user !== null){
+            order_arr = order_arr_user;
+            order_file = true;
+        }
+        else if (order_arr_user == null && order_arr_sys !== null){
+            order_arr = order_arr_sys;
             order_file = true;
         }
 
-        let pos_arr = []
-
-
+        let pos_arr_left = []
+        let pos_arr_middle = []
+        let pos_arr_right = []
         let container = indicator.container;
         container.show();
         let parent = container.get_parent();
         if (parent)
             parent.remove_actor(container);
-        
         box.insert_child_at_index(container, position);
         if (indicator.menu)
             this.menuManager.addMenu(indicator.menu);
         this.statusArea[role] = indicator;
-        
-       let destroyId = indicator.connect('destroy', emitter => {
+               
+
+        let destroyId = indicator.connect('destroy', emitter => {
             delete this.statusArea[role];
             emitter.disconnect(destroyId);
         });
@@ -91,9 +96,33 @@ function  _addToPanelBox(role, indicator, position, box) {
             pos_obj.role = k;
             pos_obj.indicator = this.statusArea[k];
             pos_obj.position = set_position;
-            pos_arr.push(pos_obj);
+            pos_obj.box = this.statusArea[k].get_parent().get_parent();
+            if (pos_obj.box.name == 'panelLeft')
+                pos_arr_left.push(pos_obj);
+            else if(pos_obj.box.name == 'panelCenter')
+                pos_arr_middle.push(pos_obj);
+            else if(pos_obj.box.name == 'panelRight')
+                pos_arr_right.push(pos_obj);
         }
-        pos_arr.sort(function(a,b){ 
+        pos_arr_left.sort(function(a,b){ 
+            if(a.position > b.position) return 1;
+            else if(b.position > a.position) return -1;
+            else if(b.position == a.position){
+                if (a.role > b.role) return 1;
+                else if (b.role > a.role) return -1;
+                else return 1;
+                }
+            })
+        pos_arr_middle.sort(function(a,b){ 
+            if(a.position > b.position) return 1;
+            else if(b.position > a.position) return -1;
+            else if(b.position == a.position){
+                if (a.role > b.role) return 1;
+                else if (b.role > a.role) return -1;
+                else return 1;
+                }
+            })
+        pos_arr_right.sort(function(a,b){ 
             if(a.position > b.position) return 1;
             else if(b.position > a.position) return -1;
             else if(b.position == a.position){
@@ -103,7 +132,9 @@ function  _addToPanelBox(role, indicator, position, box) {
                 }
             })
         if (order_file){
-            this._redrawIndicators(pos_arr);
+            this._redrawIndicators(pos_arr_left);
+            this._redrawIndicators(pos_arr_middle);
+            this._redrawIndicators(pos_arr_right);
         }
     }
 
