@@ -29,14 +29,11 @@ function _redrawIndicators (pos_arr){
             let indicator = pos_arr[i].indicator;
             let position = i;
             let box = this.statusArea[role].get_parent().get_parent()
-            log(role);
-            log(position);
             let container = indicator.container;
             container.show();
             let parent = container.get_parent();
             if (parent)
                 parent.remove_actor(container);
-            
             box.insert_child_at_index(container, position);
             if (indicator.menu)
                 this.menuManager.addMenu(indicator.menu);
@@ -88,7 +85,7 @@ function  _addToPanelBox(role, indicator, position, box) {
         indicator.connect('menu-set', this._onMenuSet.bind(this));
         this._onMenuSet(indicator);
         for (let k in this.statusArea) {
-            let set_position = getFilePosition(k, order_arr);
+            let set_position = getFilePosition(this.statusArea[k], k, order_arr);
             if (set_position == null){
                 set_position = 0;
             }
@@ -157,18 +154,24 @@ function readFile(path) {
     }
 
 
-function getFilePosition(name, arr) {
+function getFilePosition(indicator, name, arr) {
     if (arr == null){
         return null;
     }
     let toTest = name;
-    if (name.includes("/")){
-        let dummy = name.split("/");
-        toTest = dummy[dummy.length-1];
+    if (name.startsWith("appindicator-:")){
+        if (name.includes("dropbox")){
+            // dropbox needs special treatment because it appends the pid to the id. So we need to use the less appropriate title
+            toTest = indicator._indicator.title;
+            }
+        else {
+            toTest = indicator._indicator.id;
         }
+    }
     for (let val of arr) {
-        if (toTest.replace(/_/g, '-') == val[0])
+        if (toTest == val[0]){
             return parseInt(val[1]);
+            }
         }
     return null;
     }
