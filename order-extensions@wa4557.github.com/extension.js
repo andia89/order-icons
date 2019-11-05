@@ -103,33 +103,9 @@ function  _addToPanelBox(role, indicator, position, box) {
             else if(pos_obj.box.name == 'panelRight')
                 pos_arr_right.push(pos_obj);
         }
-        pos_arr_left.sort(function(a,b){ 
-            if(a.position > b.position) return 1;
-            else if(b.position > a.position) return -1;
-            else if(b.position == a.position){
-                if (a.role > b.role) return 1;
-                else if (b.role > a.role) return -1;
-                else return 1;
-                }
-            })
-        pos_arr_middle.sort(function(a,b){ 
-            if(a.position > b.position) return 1;
-            else if(b.position > a.position) return -1;
-            else if(b.position == a.position){
-                if (a.role > b.role) return 1;
-                else if (b.role > a.role) return -1;
-                else return 1;
-                }
-            })
-        pos_arr_right.sort(function(a,b){ 
-            if(a.position > b.position) return 1;
-            else if(b.position > a.position) return -1;
-            else if(b.position == a.position){
-                if (a.role > b.role) return 1;
-                else if (b.role > a.role) return -1;
-                else return 1;
-                }
-            })
+        pos_arr_left.sort(sortFun)
+        pos_arr_middle.sort(sortFun)
+        pos_arr_right.sort(sortFun)
         if (order_file){
             this._redrawIndicators(pos_arr_left);
             this._redrawIndicators(pos_arr_middle);
@@ -167,7 +143,6 @@ function getTestName(indicator, name){
         }
     }
     return toTest;
-
 }
 
 function getFilePosition(name, arr) {
@@ -180,7 +155,21 @@ function getFilePosition(name, arr) {
             }
         }
     return null;
+}
+
+function sortFun(a, b){
+    if(a.position > b.position) 
+        return 1;
+    else if(b.position > a.position) 
+        return -1;
+    else if(b.position == a.position){
+        if (a.role > b.role) 
+            return 1;
+        else if (b.role > a.role) 
+            return -1;
+        else 
+            return 1;
     }
-    
+}
 
 
