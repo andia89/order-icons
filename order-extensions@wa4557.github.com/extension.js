@@ -85,7 +85,9 @@ function  _addToPanelBox(role, indicator, position, box) {
         indicator.connect('menu-set', this._onMenuSet.bind(this));
         this._onMenuSet(indicator);
         for (let k in this.statusArea) {
-            let set_position = getFilePosition(this.statusArea[k], k, order_arr);
+            let toTest = getTestName(this.statusArea[k], k);
+            log("Order application icons: " + toTest);
+            let set_position = getFilePosition(toTest, order_arr);
             if (set_position == null){
                 set_position = 0;
             }
@@ -153,11 +155,7 @@ function readFile(path) {
     return ret_arr;
     }
 
-
-function getFilePosition(indicator, name, arr) {
-    if (arr == null){
-        return null;
-    }
+function getTestName(indicator, name){
     let toTest = name;
     if (name.startsWith("appindicator-:")){
         if (name.includes("dropbox")){
@@ -168,9 +166,16 @@ function getFilePosition(indicator, name, arr) {
             toTest = indicator._indicator.id;
         }
     }
-    log("Order application icons: " + toTest);
+    return toTest;
+
+}
+
+function getFilePosition(name, arr) {
+    if (arr == null){
+        return null;
+    }
     for (let val of arr) {
-        if (toTest == val[0]){
+        if (name == val[0]){
             return parseInt(val[1]);
             }
         }
