@@ -168,6 +168,7 @@ function getFilePosition(indicator, name, arr) {
             toTest = indicator._indicator.id;
         }
     }
+    log("Order application icons: " + toTest);
     for (let val of arr) {
         if (toTest == val[0]){
             return parseInt(val[1]);
