@@ -6,7 +6,7 @@ Gnome Shell extension for ordering icons in the top bar like for Ubuntu unity
 
 you need to add a file in `~/.local/share/indicators/applications/ordering-override.keyfile` (you can also use `/usr/share/indicators/applications/ordering-override.keyfile` for systemwide installation where you define the order of your icons using their name. 
 
-The name of the icons you can find by enabling the extension and running `journalctl /usr/bin/gnome-shell -f -n 40` in a terminal. Then you open a program that creates an indicator in the panel and look at the output. You should see something like
+The name of the icons you can find by running `journalctl /usr/bin/gnome-shell -f -n 40` in a terminal and afterwards you enable the extension. You should see something like
 ```
 Nov 05 11:48:45 user gnome-shell[18321]: Order application icons: activities
 Nov 05 11:48:45 user gnome-shell[18321]: Order application icons: appMenu
