@@ -4,8 +4,6 @@ const Extension = ExtensionUtils.getCurrentExtension();
 const Lang = imports.lang;
 const Panel = imports.ui.panel;
 const GLib = imports.gi.GLib;
-const Scripting = imports.ui.scripting;
-
 
 const home_dir = GLib.get_home_dir();
 const orderfile_path = ["/usr/share/indicators/application/", home_dir + "/.local/share/indicators/application/"];
@@ -13,9 +11,31 @@ const orderfile_fn = "ordering-override.keyfile";
 
 var _origAddToPanelBox = Panel.Panel.prototype._addToPanelBox;
 
+
+let order_file = false;
+let order_arr = null;
+
+let order_arr_sys = (readFile(orderfile_path[0]+orderfile_fn));
+let order_arr_user = (readFile(orderfile_path[1]+orderfile_fn));
+
+if (order_arr_user !== null){
+    order_arr = order_arr_user;
+    order_file = true;
+}
+else if (order_arr_user == null && order_arr_sys !== null){
+    order_arr = order_arr_sys;
+    order_file = true;
+}
+
 function enable() {
     Panel.Panel.prototype._redrawIndicators = _redrawIndicators;
     Panel.Panel.prototype._addToPanelBox = _addToPanelBox;
+    let pos_arrs = getPosArr(Main.panel.statusArea);
+    if (order_file){
+        for (let pos_arr of pos_arrs){
+            Main.panel._redrawIndicators(pos_arr);
+        }
+    }
 }
 
 function disable() {
@@ -44,29 +64,10 @@ function _redrawIndicators (pos_arr){
             });
             indicator.connect('menu-set', this._onMenuSet.bind(this));
             this._onMenuSet(indicator);
-            }
-      }
-
+        }
+}
 
 function  _addToPanelBox(role, indicator, position, box) {
-        let order_file = false;
-        let order_arr = null;
-
-        let order_arr_sys = (readFile(orderfile_path[0]+orderfile_fn));
-        let order_arr_user = (readFile(orderfile_path[1]+orderfile_fn));
-
-        if (order_arr_user !== null){
-            order_arr = order_arr_user;
-            order_file = true;
-        }
-        else if (order_arr_user == null && order_arr_sys !== null){
-            order_arr = order_arr_sys;
-            order_file = true;
-        }
-
-        let pos_arr_left = []
-        let pos_arr_middle = []
-        let pos_arr_right = []
         let container = indicator.container;
         container.show();
         let parent = container.get_parent();
@@ -84,35 +85,12 @@ function  _addToPanelBox(role, indicator, position, box) {
         });
         indicator.connect('menu-set', this._onMenuSet.bind(this));
         this._onMenuSet(indicator);
-        for (let k in this.statusArea) {
-            let toTest = getTestName(this.statusArea[k], k);
-            log("Order application icons: " + toTest);
-            let set_position = getFilePosition(toTest, order_arr);
-            if (set_position == null){
-                set_position = 0;
-            }
-            pos_obj = {}
-            pos_obj.role = k;
-            pos_obj.indicator = this.statusArea[k];
-            pos_obj.position = set_position;
-            pos_obj.box = this.statusArea[k].get_parent().get_parent();
-            if (pos_obj.box.name == 'panelLeft')
-                pos_arr_left.push(pos_obj);
-            else if(pos_obj.box.name == 'panelCenter')
-                pos_arr_middle.push(pos_obj);
-            else if(pos_obj.box.name == 'panelRight')
-                pos_arr_right.push(pos_obj);
-        }
-        pos_arr_left.sort(sortFun)
-        pos_arr_middle.sort(sortFun)
-        pos_arr_right.sort(sortFun)
+        let pos_arrs = getPosArr(this.statusArea);
         if (order_file){
-            this._redrawIndicators(pos_arr_left);
-            this._redrawIndicators(pos_arr_middle);
-            this._redrawIndicators(pos_arr_right);
+            for (let pos_arr of pos_arrs)
+                this._redrawIndicators(pos_arr);
         }
-    }
-
+}
 
 function readFile(path) {
     let test = GLib.file_test(path, GLib.FileTest.IS_REGULAR)
@@ -129,7 +107,39 @@ function readFile(path) {
         ret_arr.push(temp_val);
     }
     return ret_arr;
+}
+
+function getPosArr(statusArea){
+    let pos_arr_left = []
+    let pos_arr_middle = []
+    let pos_arr_right = []
+
+    for (let k in statusArea) {
+        let toTest = getTestName(statusArea[k], k);
+        log("Order application icons: " + toTest);
+        let set_position = getFilePosition(toTest, order_arr);
+        if (set_position == null){
+            set_position = 0;
+        }
+        pos_obj = {}
+        pos_obj.role = k;
+        pos_obj.indicator = statusArea[k];
+        pos_obj.position = set_position;
+        pos_obj.box = statusArea[k].get_parent().get_parent();
+        if (pos_obj.box.name == 'panelLeft')
+            pos_arr_left.push(pos_obj);
+        else if(pos_obj.box.name == 'panelCenter')
+            pos_arr_middle.push(pos_obj);
+        else if(pos_obj.box.name == 'panelRight')
+            pos_arr_right.push(pos_obj);
     }
+    pos_arr_left.sort(sortFun)
+    pos_arr_middle.sort(sortFun)
+    pos_arr_right.sort(sortFun)
+
+    return [pos_arr_left, pos_arr_middle, pos_arr_right]
+}
+
 
 function getTestName(indicator, name){
     let toTest = name;
