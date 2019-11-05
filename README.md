@@ -4,9 +4,46 @@ Gnome Shell extension for ordering icons in the top bar like for Ubuntu unity
 
 ## How to
 
-you need to add a file in `~/.local/share/indicators/applications/ordering-override.keyfile` (you can also use `/usr/share/indicators/applications/ordering-override.keyfile` for systemwide installation where you define the order of your icons using their name. The name of the icons you can find in the corresponding `extension.js` file of the corresponding extension ("Caffeine" for the caffeine extensions for example).
+you need to add a file in `~/.local/share/indicators/applications/ordering-override.keyfile` (you can also use `/usr/share/indicators/applications/ordering-override.keyfile` for systemwide installation where you define the order of your icons using their name. 
 
-If you also want to change the order of the icons made by the Ubuntu top-bar extension you need to find out the name of the icon it registers: `:1.274/org/ayatana/NotificationItem/variety` will become `variety`. You can do that by running `gnome-shell --replace` in the terminal and look at the output, which will tell you the name.
+The name of the icons you can find by enabling the extension and running `journalctl /usr/bin/gnome-shell -f -n 40` in a terminal. Then you open a program that creates an indicator in the panel and look at the output. You should see something like
+```
+Nov 05 11:48:45 user gnome-shell[18321]: Order application icons: activities
+Nov 05 11:48:45 user gnome-shell[18321]: Order application icons: appMenu
+Nov 05 11:48:45 user gnome-shell[18321]: Order application icons: dateMenu
+Nov 05 11:48:45 user gnome-shell[18321]: Order application icons: dwellClick
+Nov 05 11:48:45 user gnome-shell[18321]: Order application icons: a11y
+Nov 05 11:48:45 user gnome-shell[18321]: Order application icons: keyboard
+Nov 05 11:48:45 user gnome-shell[18321]: Order application icons: aggregateMenu
+Nov 05 11:48:45 user gnome-shell[18321]: Order application icons: system-monitor
+Nov 05 11:48:45 user gnome-shell[18321]: Order application icons: Caffeine
+Nov 05 11:48:45 user gnome-shell[18321]: Order application icons: diodonGnomeIndicator
+Nov 05 11:48:45 user gnome-shell[18321]: Order application icons: Insync
+Nov 05 11:48:45 user gnome-shell[18321]: Order application icons: ownCloud
+Nov 05 11:48:45 user gnome-shell[18321]: Order application icons: unity-mail
+Nov 05 11:48:45 user gnome-shell[18321]: Order application icons: remmina-icon
+Nov 05 11:48:45 user gnome-shell[18321]: Order application icons: Franz1
+Nov 05 11:48:45 user gnome-shell[18321]: Order application icons: dropbox
+Nov 05 11:48:45 user gnome-shell[18321]: Order application icons: TeamViewer
+```
+depending on the apps you are using. The names shown here are the ones you should put in the file. The file should then look something like
+
+```
+[left box]
+activites=1
+appMenu=2
+
+[middle box]
+dateMenu=1
+
+[right box]
+a11y=1
+system-monitor=2
+.
+.
+.
+```
+
 
 ## Disclaimer
 
