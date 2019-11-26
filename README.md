@@ -1,6 +1,10 @@
 # order-icons
 Gnome Shell extension for ordering icons in the top bar like for Ubuntu unity
 
+## Install
+Either install it via github or enable via extensions.gnome.org
+
+https://extensions.gnome.org/extension/2114/order-gnome-shell-extensions/
 
 ## How to
 
