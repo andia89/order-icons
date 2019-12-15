@@ -132,7 +132,7 @@ function getPosArr(statusArea){
         if (set_position == null){
             set_position = 0;
         }
-        pos_obj = {}
+        let pos_obj = {}
         pos_obj.role = k;
         pos_obj.indicator = statusArea[k];
         pos_obj.position = set_position;
