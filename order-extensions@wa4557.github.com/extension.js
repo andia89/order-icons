@@ -68,6 +68,17 @@ function _redrawIndicators (pos_arr){
 }
 
 function  _addToPanelBox(role, indicator, position, box) {
+        order_arr_sys = (readFile(orderfile_path[0]+orderfile_fn));
+        order_arr_user = (readFile(orderfile_path[1]+orderfile_fn));
+
+        if (order_arr_user !== null){
+            order_arr = order_arr_user;
+            order_file = true;
+        }
+        else if (order_arr_user == null && order_arr_sys !== null){
+            order_arr = order_arr_sys;
+            order_file = true;
+        }
         let container = indicator.container;
         container.show();
         let parent = container.get_parent();
