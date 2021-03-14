@@ -154,7 +154,7 @@ function getPosArr(statusArea){
 
 function getTestName(indicator, name){
     let toTest = name;
-    if (name.startsWith("appindicator-:")){
+    if (name.startsWith("appindicator-")){
         if (name.includes("dropbox")){
             // dropbox needs special treatment because it appends the pid to the id. So we need to use the less appropriate title
             toTest = indicator._indicator.title;
