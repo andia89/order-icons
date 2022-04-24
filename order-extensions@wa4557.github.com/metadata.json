@@ -6,7 +6,9 @@
   "name": "Order Gnome Shell extensions", 
   "shell-version": [
     "3.24", 
-    "3.26"
+    "3.26",
+    "40",
+    "41"
   ], 
   "uuid": "order-extensions@wa4557.github.com", 
   "version": 15

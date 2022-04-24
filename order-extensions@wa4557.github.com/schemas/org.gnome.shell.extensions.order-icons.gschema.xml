@@ -1,0 +1,19 @@
+<schemalist gettext-domain="gnome-shell-extensions">
+  <schema id="org.gnome.shell.extensions.order-icons" path="/org/gnome/shell/extensions/order-icons/">
+    <key name="order-icons-left" type="as">
+      <default>[]</default>
+      <summary>Order icons left box</summary>
+      <description>Order icons according to this list</description>
+    </key>
+    <key name="order-icons-center" type="as">
+      <default>[]</default>
+      <summary>Order icons center box</summary>
+      <description>Order icons according to this list</description>
+    </key>
+    <key name="order-icons-right" type="as">
+      <default>[]</default>
+      <summary>Order icons right box</summary>
+      <description>Order icons according to this list</description>
+    </key>
+  </schema>
+</schemalist>
