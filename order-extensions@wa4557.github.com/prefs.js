@@ -49,7 +49,9 @@ class OrderIconsPreferences extends Gtk.Box {
         let button_down_center = null;
         let button_up_right = null;
         let button_down_right = null;
-        
+        let button_del_left = null;
+        let button_del_right = null;
+        let button_del_center = null;
         // Boxes for list stores
         this.right_order_hbox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL,
             spacing: 8,
@@ -96,29 +98,35 @@ class OrderIconsPreferences extends Gtk.Box {
         button_up_left.set_icon_name("gtk-go-up");
         button_down_left = new Gtk.Button()
         button_down_left.set_icon_name("gtk-go-down");
-        
-        
+        button_del_left = new Gtk.Button()
+        button_del_left.set_icon_name("gtk-delete");
         
         
         if (imports.gi.versions.Gtk === '4.0') {
             this.left_button_vbox.append(button_up_left);
             this.left_button_vbox.append(button_down_left);
+            this.left_button_vbox.append(button_del_left);
         } else {
             this.left_button_vbox.pack_start(button_up_left, true, true, 0);
             this.left_button_vbox.pack_start(button_down_left, false, false, 0);
+            this.left_button_vbox.pack_start(button_del_left, false, false, 0);
         }
         
         button_up_center = new Gtk.Button()
         button_up_center.set_icon_name("gtk-go-up");
         button_down_center = new Gtk.Button()
         button_down_center.set_icon_name("gtk-go-down");
+        button_del_center = new Gtk.Button()
+        button_del_center.set_icon_name("gtk-delete");
         
         if (imports.gi.versions.Gtk === '4.0') {
             this.center_button_vbox.append(button_up_center);
             this.center_button_vbox.append(button_down_center);
+            this.center_button_vbox.append(button_del_center);
         } else {
             this.center_button_vbox.pack_start(button_up_center, true, true, 0);
             this.center_button_vbox.pack_start(button_down_center, false, false, 0);
+            this.center_button_vbox.pack_start(button_del_center, false, false, 0);
         }
         
         
@@ -126,13 +134,17 @@ class OrderIconsPreferences extends Gtk.Box {
         button_up_right.set_icon_name("gtk-go-up");
         button_down_right = new Gtk.Button()
         button_down_right.set_icon_name("gtk-go-down");
+        button_del_right = new Gtk.Button()
+        button_del_right.set_icon_name("gtk-delete");
         
         if (imports.gi.versions.Gtk === '4.0') {
             this.right_button_vbox.append(button_up_right);
             this.right_button_vbox.append(button_down_right);
+            this.right_button_vbox.append(button_del_right);
         } else {
             this.right_button_vbox.pack_start(button_up_right, true, true, 0);
             this.right_button_vbox.pack_start(button_down_right, false, false, 0);
+            this.right_button_vbox.pack_start(button_del_right, false, false, 0);
         }
         
         
@@ -281,6 +293,33 @@ class OrderIconsPreferences extends Gtk.Box {
         });
         
         
+        button_del_left.connect("clicked",  _ => {
+            let selection = leftorderTreeView.get_selection();
+            let [isSelected, model, selected_row] = selection.get_selected();
+            if (isSelected == false) return
+            
+            let [index2, model2] = selection.get_selected_rows()
+            let index = index2[0].get_indices()
+
+            let length_store = order_left_store.iter_n_children(null);
+          
+                 order_left_store.remove(selected_row)
+                 let new_order_arr = []
+                 for (let i = 0; i < length_store; i++) {
+                        const returnIter = order_left_store.iter_nth_child(null, i);
+                        const [success, iterList] = returnIter;
+                        if (!success)
+                            break;
+                        if (iterList) {
+                            new_order_arr.push(order_left_store.get_value(iterList, 0));
+                        } else {
+                            break;
+                        }
+                 }
+                 this._settings.set_value("order-icons-left", new GLib.Variant('as', new_order_arr))
+        });
+        
+        
         
         button_up_center.connect("clicked",  _ => {
             let selection = centerorderTreeView.get_selection();
@@ -342,6 +381,32 @@ class OrderIconsPreferences extends Gtk.Box {
         });
         
         
+        button_del_center.connect("clicked",  _ => {
+            let selection = centerorderTreeView.get_selection();
+            let [isSelected, model, selected_row] = selection.get_selected();
+            if (isSelected == false) return
+            
+            let [index2, model2] = selection.get_selected_rows()
+            let index = index2[0].get_indices()
+
+            let length_store = order_center_store.iter_n_children(null);
+          
+                 order_center_store.remove(selected_row)
+                 let new_order_arr = []
+                 for (let i = 0; i < length_store; i++) {
+                        const returnIter = order_center_store.iter_nth_child(null, i);
+                        const [success, iterList] = returnIter;
+                        if (!success)
+                            break;
+                        if (iterList) {
+                            new_order_arr.push(order_center_store.get_value(iterList, 0));
+                        } else {
+                            break;
+                        }
+                 }
+                 this._settings.set_value("order-icons-center", new GLib.Variant('as', new_order_arr))
+        });
+        
         
         button_up_right.connect("clicked",  _ => {
             let selection = rightorderTreeView.get_selection();
@@ -402,6 +467,31 @@ class OrderIconsPreferences extends Gtk.Box {
             }
         });
         
+        button_del_right.connect("clicked",  _ => {
+            let selection = rightorderTreeView.get_selection();
+            let [isSelected, model, selected_row] = selection.get_selected();
+            if (isSelected == false) return
+            
+            let [index2, model2] = selection.get_selected_rows()
+            let index = index2[0].get_indices()
+
+            let length_store = order_right_store.iter_n_children(null);
+          
+                 order_right_store.remove(selected_row)
+                 let new_order_arr = []
+                 for (let i = 0; i < length_store; i++) {
+                        const returnIter = order_right_store.iter_nth_child(null, i);
+                        const [success, iterList] = returnIter;
+                        if (!success)
+                            break;
+                        if (iterList) {
+                            new_order_arr.push(order_right_store.get_value(iterList, 0));
+                        } else {
+                            break;
+                        }
+                 }
+                 this._settings.set_value("order-icons-right", new GLib.Variant('as', new_order_arr))
+        });
 
         if (imports.gi.versions.Gtk === '4.0'){
             this.left_order_hbox.append(leftorderTreeView);
