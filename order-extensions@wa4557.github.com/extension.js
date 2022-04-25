@@ -8,7 +8,7 @@ const Me = ExtensionUtils.getCurrentExtension();
 const _origAddToPanelBox = Panel.Panel.prototype._addToPanelBox;
 
 let timeout_id = null;
-const settingIds = [];
+let settingIds = [];
 let settings = null;
 let order_arr_left = null;
 let order_arr_center= null;
