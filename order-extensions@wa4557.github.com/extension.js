@@ -4,20 +4,22 @@ const GLib = imports.gi.GLib;
 const ByteArray = imports.byteArray
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
-const Convenience = Me.imports.convenience;
 
 const _origAddToPanelBox = Panel.Panel.prototype._addToPanelBox;
 
-
-const settings = Convenience.getSettings("org.gnome.shell.extensions.order-icons")
-let order_arr_left = settings.get_value("order-icons-left").deep_unpack()
-let order_arr_center = settings.get_value("order-icons-center").deep_unpack()
-let order_arr_right = settings.get_value("order-icons-right").deep_unpack()
-
-
+let timeout_id = null;
 const settingIds = [];
+let settings = null;
+let order_arr_left = null;
+let order_arr_center= null;
+let order_arr_right = null;
+
 
 function enable() {
+    settings = ExtensionUtils.getSettings("org.gnome.shell.extensions.order-icons")
+    order_arr_left = settings.get_value("order-icons-left").deep_unpack()
+    order_arr_center = settings.get_value("order-icons-center").deep_unpack()
+    order_arr_right = settings.get_value("order-icons-right").deep_unpack()
     Panel.Panel.prototype._redrawIndicators = _redrawIndicators;
     Panel.Panel.prototype._addToPanelBox = _addToPanelBox;
     Main.panel._redrawIndicators();
@@ -37,6 +39,12 @@ function disable() {
     Panel.Panel.prototype._redrawIndicators = undefined;
     Panel.Panel.prototype._addToPanelBox = _origAddToPanelBox;
     settingIds.forEach(id => settings.disconnect(id));
+    GLib.Source.remove(timeout_id);
+    timeout_id = null;
+    order_arr_left = null;
+    order_arr_center = null;
+    order_arr_right = null;
+    settingIds = null;
 }
 
 
@@ -153,7 +161,7 @@ function until(conditionFunction) {
             resolve();
             return GLib.G_SOURCE_REMOVE;
         } else {
-            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, _ => poll(resolve));
+            timeout_id = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, _ => poll(resolve));
             return GLib.G_SOURCE_REMOVE;
         }
     }
