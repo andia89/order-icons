@@ -92,11 +92,11 @@ const OrderIconsPreferences = GObject.registerClass(
             });
 
             button_up_left = new Gtk.Button()
-            button_up_left.set_icon_name("gtk-go-up");
+            button_up_left.set_icon_name("go-up-symbolic");
             button_down_left = new Gtk.Button()
-            button_down_left.set_icon_name("gtk-go-down");
+            button_down_left.set_icon_name("go-down-symbolic");
             button_del_left = new Gtk.Button()
-            button_del_left.set_icon_name("gtk-delete");
+            button_del_left.set_icon_name("edit-delete-symbolic");
             if (imports.gi.versions.Gtk === '4.0') {
                 this.left_button_vbox.append(button_up_left);
                 this.left_button_vbox.append(button_down_left);
@@ -108,11 +108,11 @@ const OrderIconsPreferences = GObject.registerClass(
             }
 
             button_up_center = new Gtk.Button()
-            button_up_center.set_icon_name("gtk-go-up");
+            button_up_center.set_icon_name("go-up-symbolic");
             button_down_center = new Gtk.Button()
-            button_down_center.set_icon_name("gtk-go-down");
+            button_down_center.set_icon_name("go-down-symbolic");
             button_del_center = new Gtk.Button()
-            button_del_center.set_icon_name("gtk-delete");
+            button_del_center.set_icon_name("edit-delete-symbolic");
             if (imports.gi.versions.Gtk === '4.0') {
                 this.center_button_vbox.append(button_up_center);
                 this.center_button_vbox.append(button_down_center);
@@ -124,11 +124,11 @@ const OrderIconsPreferences = GObject.registerClass(
             }
 
             button_up_right = new Gtk.Button()
-            button_up_right.set_icon_name("gtk-go-up");
+            button_up_right.set_icon_name("go-up-symbolic");
             button_down_right = new Gtk.Button()
-            button_down_right.set_icon_name("gtk-go-down");
+            button_down_right.set_icon_name("go-down-symbolic");
             button_del_right = new Gtk.Button()
-            button_del_right.set_icon_name("gtk-delete");
+            button_del_right.set_icon_name("edit-delete-symbolic");
             if (imports.gi.versions.Gtk === '4.0') {
                 this.right_button_vbox.append(button_up_right);
                 this.right_button_vbox.append(button_down_right);
