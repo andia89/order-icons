@@ -8,7 +8,7 @@ const Me = ExtensionUtils.getCurrentExtension();
 const _origAddToPanelBox = Panel.Panel.prototype._addToPanelBox;
 
 let timeout_id = null;
-let settingIds = [];
+let settingIds = null;
 let settings = null;
 let order_arr_left = null;
 let order_arr_center= null;
@@ -206,21 +206,4 @@ function getSettingsPosition(name, arr) {
     }
     let index = arr.indexOf(name);
     return index != -1 ? index : 0;
-}
-
-
-function sortFun(a, b) {
-    if (a.position > b.position) {
-        return 1;
-    } else if (b.position > a.position) {
-        return -1;
-    } else if (b.position == a.position) {
-        if (a.role > b.role) {
-            return 1;
-        } else if (b.role > a.role) {
-            return -1;
-        } else {
-            return 1;
-        }
-    }
 }
