@@ -12,8 +12,6 @@ The icons for each panel (left, right and center) can be ordered using the Exten
 
 Note that this extension is the one determining the order, any ordering done by other apps (and / or extensions) will be overwritten.
 
-```
-
 
 ## Disclaimer
 
