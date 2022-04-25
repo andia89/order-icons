@@ -23,6 +23,7 @@ function enable() {
     Panel.Panel.prototype._redrawIndicators = _redrawIndicators;
     Panel.Panel.prototype._addToPanelBox = _addToPanelBox;
     Main.panel._redrawIndicators();
+    settingIds = [];
     settingIds.push(settings.connect('changed::order-icons-left', _ => {
         Main.panel._redrawIndicators()
     }));
