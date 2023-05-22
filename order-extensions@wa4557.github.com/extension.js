@@ -46,6 +46,7 @@ function disable() {
     order_arr_center = null;
     order_arr_right = null;
     settingIds = null;
+    settings = null;
 }
 
 
