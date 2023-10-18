@@ -15,5 +15,10 @@
       <summary>Order icons right box</summary>
       <description>Order icons according to this list</description>
     </key>
+        <key name="icons-blacklist" type="as">
+      <default>[]</default>
+      <summary>Blacklist icons</summary>
+      <description>Blacklist icons from showing up</description>
+    </key>
   </schema>
 </schemalist>

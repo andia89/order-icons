@@ -1,16 +1,14 @@
 {
-  "author": "Andreas Angerer", 
-  "description": "Fixes order of gnome-shell extensions", 
-  "extension-id": "order-extensions", 
-  "gettext-domain": "order extensions", 
-  "name": "Order Gnome Shell extensions", 
+  "author": "Andreas Angerer",
+  "description": "Fixes order of gnome-shell extensions",
+  "extension-id": "order-extensions",
+  "gettext-domain": "order extensions",
+  "name": "Order Gnome Shell extensions",
   "shell-version": [
-    "40",
-    "41", 
-    "42", 
-    "43",
-    "44"
-  ], 
-  "uuid": "order-extensions@wa4557.github.com", 
+    "45"
+  ],
+  "url": "",
+  "uuid": "order-extensions@wa4557.github.com",
+  "settings-schema": "org.gnome.shell.extensions.order-icons",
   "version": 15
 }
