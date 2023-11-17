@@ -211,6 +211,7 @@ function getTestName(indicator, name) {
         }
     }
     if (toTest) {
+        console.log(toTest);
         const regex = /appindicator-legacy:(.*?):/;
         const match = toTest.match(regex);
         if (match && match.length > 1) {
