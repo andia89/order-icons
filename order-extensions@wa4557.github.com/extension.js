@@ -191,15 +191,9 @@ function until(conditionFunction) {
 function getTestName(indicator, name) {
     let toTest = name;
     if (indicator._indicator) {
-
         let id = indicator._indicator.id;
-        let title = indicator._indicator.title;
         if (name.startsWith('appindicator-')) {
-            if (name.includes('dropbox')) {
-                // dropbox needs special treatment because it appends the pid to the id.
-                // So we need to use the less appropriate title
-                toTest = title;
-            } else if (id.startsWith('chrome_status_icon')) {
+            if (id.startsWith('chrome_status_icon')) {
                 // electron apps don't give a good ID with newer releases, so we have to revert to command line and try to get something useful
                 let commandLine = indicator._indicator._commandLine;
                 let commandLineSplit = commandLine.split('/');
@@ -211,17 +205,19 @@ function getTestName(indicator, name) {
         }
     }
     if (toTest) {
-        const regex = /appindicator-legacy:(.*?):/;
-        const match = toTest.match(regex);
+        const match = toTest.match(/appindicator-legacy:(.*?):/);
         if (match && match.length > 1) {
             return match[1];
         }
-        
+        if (toTest.includes('dropbox')) {
+            // dropbox needs special treatment because it appends the pid to the id.
+            // So we need to hardcode the name
+            return 'dropbox';
+        }
         return toTest;
-    } else {
-        let ret = name.split("/")
-        return ret[ret.length - 1].replaceAll("_", "-")
     }
+    let ret = name.split("/")
+    return ret[ret.length - 1].replaceAll("_", "-")
 }
 
 async function waitForId(indicator, name) {
