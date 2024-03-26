@@ -77,7 +77,7 @@ function _addToPanelBox(role, indicator, position, box) {
     container.show();
     const parent = container.get_parent();
     if (parent) {
-        parent.remove_actor(container);
+        parent.remove_child(container);
     }
 
     this.statusArea[role] = indicator;
